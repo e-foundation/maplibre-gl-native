@@ -67,15 +67,9 @@ class MapSnapshotterActivity : AppCompatActivity() {
     private fun startSnapShot(row: Int, column: Int) {
         // Optionally the style
         val builder = Style.Builder()
-            .fromUri(
-                Style.getPredefinedStyle(
-                    if ((column + row) % 2 == 0) {
-                        "Streets"
-                    } else {
-                        "Pastel"
-                    }
+                .fromJson(
+                        assets.open("basic-style.json").bufferedReader().readText()
                 )
-            )
 
         // Define the dimensions
         val options = MapSnapshotter.Options(
