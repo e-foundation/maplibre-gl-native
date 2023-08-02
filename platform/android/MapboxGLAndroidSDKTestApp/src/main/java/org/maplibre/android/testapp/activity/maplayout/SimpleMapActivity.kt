@@ -3,6 +3,8 @@ package org.maplibre.android.testapp.activity.maplayout
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.geometry.LatLngBounds
 import org.maplibre.android.maps.*
 import org.maplibre.android.testapp.R
 import org.maplibre.android.testapp.utils.NavUtils
@@ -23,6 +25,14 @@ class SimpleMapActivity : AppCompatActivity() {
                 if (styles != null && styles.size > 0) {
                     val styleUrl = styles[0].url
                     maplibreMap.setStyle(Style.Builder().fromUri(styleUrl))
+                }
+
+                maplibreMap.addOnCameraIdleListener {
+                    maplibreMap.moveCamera(CameraUpdateFactory.newLatLngBounds(
+                        maplibreMap.projection.visibleRegion.let {
+                            LatLngBounds.fromLatLngs(listOf(it.farLeft!!, it.farRight!!, it.nearLeft!!, it.nearRight!!))
+                        }, 0
+                    ))
                 }
             }
         )
